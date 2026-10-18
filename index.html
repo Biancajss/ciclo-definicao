@@ -256,6 +256,18 @@ button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:tra
 .shop summary{cursor:pointer;font-weight:700;font-size:14.5px}
 .shop ul{margin:6px 0 2px;padding-left:18px;font-size:14px;color:var(--muted);columns:2;column-gap:18px}
 .note{font-size:12.5px;color:var(--faint);margin:0;text-align:center}
+.goal-bar{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.btn.small{padding:6px 12px;font-size:13px;border-radius:10px}
+.sheet{position:fixed;inset:0;z-index:40;background:color-mix(in srgb,var(--fg) 45%,transparent);display:flex;align-items:flex-end;justify-content:center;
+  padding:16px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sheet[hidden]{display:none!important}
+.sheet-card{width:100%;max-width:440px;background:var(--surface);border-radius:24px;padding:22px 20px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow);animation:fade .25s ease}
+.sheet-card h2{font-size:30px;font-weight:800;text-transform:uppercase;line-height:1}
+.sheet-card p{margin:0;color:var(--muted);font-size:14.5px}
+.gs-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.gs-grid label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);min-width:0}
+.gs-grid input{font:inherit;font-size:20px;font-weight:700;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--fg);width:100%;min-width:0}
+.gs-err{color:var(--warn)!important;font-weight:600}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,10px);font-size:13px;font-weight:600;background:var(--fg);color:var(--bg);padding:8px 16px;border-radius:999px;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:30;white-space:nowrap}
 .toast.show{opacity:.95;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -336,12 +348,13 @@ button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:tra
   <!-- PESO -->
   <section class="view" id="v-peso" aria-label="Peso" hidden>
     <div class="card goal">
+      <div class="goal-bar"><span class="eyebrow" id="goalLine">Meta: 80 → 70 kg</span><button class="btn small" type="button" id="goalEdit">Editar meta</button></div>
       <div class="goal-top">
         <div><div class="eyebrow">Peso atual</div><div class="goal-big num" id="wNow">80<small>kg</small></div></div>
         <div style="text-align:right"><div class="eyebrow">Faltam</div><div class="goal-big num" id="wLeft">10<small>kg</small></div></div>
       </div>
       <div class="track" role="progressbar" aria-label="Progresso da meta" id="wBar"><i style="width:0%"></i></div>
-      <div class="track-ends num"><span>80 kg</span><span id="wPct">0% da meta</span><span>70 kg</span></div>
+      <div class="track-ends num"><span id="wStartL">80 kg</span><span id="wPct">0% da meta</span><span id="wGoalL">70 kg</span></div>
     </div>
     <div class="card"><svg class="chart" id="chart" viewBox="0 0 600 260" role="img" aria-label="Gráfico do peso ao longo do tempo"></svg></div>
     <div class="card">
@@ -368,6 +381,20 @@ button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:tra
   <button class="tab" type="button" role="tab" data-tab="peso" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg>Peso</button>
   <button class="tab" type="button" role="tab" data-tab="guia" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 4h10l4 4v12H5z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg>Guia</button>
 </div></nav>
+<div class="sheet" id="goalSheet" hidden role="dialog" aria-modal="true" aria-labelledby="gsTitle">
+  <form class="sheet-card" id="goalForm">
+    <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M6 8v8M3.5 10v4M18 8v8M20.5 10v4M6 12h12"/></svg></div>
+    <h2 id="gsTitle">Sua meta</h2>
+    <p id="gsText">Informe seu peso atual e o peso que você quer alcançar. O app calcula o progresso, a água e a proteína a partir disso.</p>
+    <div class="gs-grid">
+      <label for="gStart">Peso atual (kg)<input id="gStart" type="number" step="0.1" min="30" max="250" inputmode="decimal" placeholder="80" required></label>
+      <label for="gTarget">Meta (kg)<input id="gTarget" type="number" step="0.1" min="30" max="250" inputmode="decimal" placeholder="70" required></label>
+    </div>
+    <p class="gs-err" id="gsErr" hidden></p>
+    <button class="btn primary" type="submit">Salvar meta</button>
+    <button class="btn" type="button" id="gsCancel">Cancelar</button>
+  </form>
+</div>
 <div class="toast" id="toast">Salvo</div>
 
 <script>
@@ -464,12 +491,12 @@ const PHASES=[
  {w:[8],tag:"Sem. 8",short:"Avaliação e semana leve",txt:"Avalie peso médio, cintura, fotos e cargas. Faça uma semana leve: reduza as séries em 30–40% e mantenha as cargas, antes de recomeçar um novo ciclo."}];
 const GUIDE=[
  ["Perda de peso","O treino ajuda a preservar massa muscular; a perda de gordura também depende de déficit calórico sustentável, sono e consistência."],
- ["Meta e prazo","80 kg → 70 kg. Uma referência possível é 0,25–0,75 kg por semana; o prazo pode variar bastante, frequentemente alguns meses."],
+ ["Meta e prazo","{START} kg → {GOAL} kg. Uma referência possível é 0,25–0,75 kg por semana; o prazo pode variar bastante, frequentemente alguns meses."],
  ["Abdômen e cintura","Exercícios de core fortalecem a região, mas não queimam gordura localizada. A cintura tende a reduzir com a perda geral de gordura."],
  ["Ciclo, não calendário","A sequência de dias é um ciclo de treino, não dias fixos da semana. Ajuste os descansos conforme recuperação e orientação do profissional da academia."],
  ["Segurança","Não treine até a falha em todas as séries. Interrompa se houver tontura importante, dor no peito ou falta de ar desproporcional. Sintomas recorrentes como dor de cabeça ou fraqueza após o exercício merecem avaliação médica.","alert"]];
 
-const START=80, GOAL=70, WEEKS=8, LSKEY="ciclo-definicao-v1";
+let START=80, GOAL=70; const WEEKS=8, LSKEY="ciclo-definicao-v1";
 let S={s:{},w:[],week:null,day:null,tab:"hoje"};
 const $=id=>document.getElementById(id);
 const key=(w,d)=>`w${w}d${d}`;
@@ -557,13 +584,15 @@ function renderPlano(){
 function renderPeso(){
   const list=[...S.w].sort((a,b)=>a.d<b.d?-1:1);
   const now=list.length?list[list.length-1].kg:START;
-  const left=Math.max(0,now-GOAL),p=Math.max(0,Math.min(1,(START-now)/(START-GOAL)));
+  const left=Math.abs(now-GOAL),p=START===GOAL?1:Math.max(0,Math.min(1,(START-now)/(START-GOAL)));
+  $("wStartL").textContent=`${fmtKg(START).replace(",0","")} kg`;$("wGoalL").textContent=`${fmtKg(GOAL).replace(",0","")} kg`;
+  $("goalLine").textContent=`Meta: ${fmtKg(START).replace(",0","")} → ${fmtKg(GOAL).replace(",0","")} kg`;
   $("wNow").innerHTML=`${fmtKg(now)}<small>kg</small>`;$("wLeft").innerHTML=`${fmtKg(left)}<small>kg</small>`;
   $("wBar").firstElementChild.style.width=(p*100)+"%";$("wBar").setAttribute("aria-valuenow",Math.round(p*100));
   $("wPct").textContent=`${Math.round(p*100)}% da meta`;
   $("wList").innerHTML=list.length?[...list].reverse().map((e,i,a)=>{const prev=a[i+1];const diff=prev?e.kg-prev.kg:null;
     return `<li><span class="num">${fmtDate(e.d)}</span><span class="num"><b>${fmtKg(e.kg)} kg</b>${diff!==null?` <span style="color:${diff<=0?"var(--ok)":"var(--warn)"};font-size:12.5px;font-weight:600">${diff>0?"+":""}${fmtKg(diff)}</span>`:""}</span><button class="del" type="button" aria-label="Apagar registro de ${fmtDate(e.d)}" data-delw="${e.d}">×</button></li>`}).join("")
-    :`<li class="empty" style="border:0;padding-top:0">Nenhuma pesagem ainda. Registre a primeira para ver a curva rumo aos 70 kg.</li>`;
+    :`<li class="empty" style="border:0;padding-top:0">Nenhuma pesagem ainda. Registre a primeira para ver a curva rumo à sua meta.</li>`;
   drawChart(list);
 }
 function drawChart(list){
@@ -575,13 +604,13 @@ function drawChart(list){
   const n=Math.max(pts.length-1,1),x=i=>L+i/n*(W-L-R);
   let g="";const step=(hi-lo)>12?4:2;
   for(let v=Math.ceil(lo/step)*step;v<=hi;v+=step)g+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end">${v}</text>`;
-  g+=`<line x1="${L}" x2="${W-R}" y1="${y(GOAL)}" y2="${y(GOAL)}" stroke="var(--ok)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="${W-R}" y="${y(GOAL)-6}" text-anchor="end" style="fill:var(--ok);font-weight:600">meta 70 kg</text>`;
+  g+=`<line x1="${L}" x2="${W-R}" y1="${y(GOAL)}" y2="${y(GOAL)}" stroke="var(--ok)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="${W-R}" y="${y(GOAL)-6}" text-anchor="end" style="fill:var(--ok);font-weight:600">meta ${fmtKg(GOAL).replace(",0","")} kg</text>`;
   if(list.length){
     const line=pts.map((p,i)=>`${x(i)},${y(p.kg)}`).join(" ");
     g+=`<polygon points="${x(0)},${H-B} ${line} ${x(pts.length-1)},${H-B}" fill="var(--accent)" opacity=".13"/><polyline points="${line}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
     pts.forEach((p,i)=>{const last=i===pts.length-1;g+=`<circle cx="${x(i)}" cy="${y(p.kg)}" r="${last?6:3}" fill="${last?"var(--accent)":"var(--surface)"}" stroke="var(--accent)" stroke-width="2"/>`});
     g+=`<text x="${x(0)}" y="${H-10}" text-anchor="start">início</text><text x="${x(pts.length-1)}" y="${H-10}" text-anchor="end">${fmtDate(list[list.length-1].d)}</text>`;
-  } else g+=`<circle cx="${L+8}" cy="${y(START)}" r="6" fill="var(--accent)"/><text x="${L+20}" y="${y(START)+4}">início · 80 kg</text>`;
+  } else g+=`<circle cx="${L+8}" cy="${y(START)}" r="6" fill="var(--accent)"/><text x="${L+20}" y="${y(START)+4}">início · ${fmtKg(START).replace(",0","")} kg</text>`;
   $("chart").innerHTML=g;
 }
 
@@ -589,7 +618,7 @@ function drawChart(list){
 function renderGuia(){
   const w=curW();
   $("phases").innerHTML=PHASES.map(p=>`<div class="phase ${p.w.includes(w)?"now":""}"><span class="tag">${p.tag}</span><p>${p.txt}</p></div>`).join("");
-  $("guide").innerHTML=GUIDE.map(g=>`<div class="g ${g[2]||""}"><b>${g[0]}</b><p>${g[1]}</p></div>`).join("");
+  $("guide").innerHTML=GUIDE.map(g=>`<div class="g ${g[2]||""}"><b>${g[0]}</b><p>${g[1].replace("{START}",fmtKg(START).replace(",0","")).replace("{GOAL}",fmtKg(GOAL).replace(",0",""))}</p></div>`).join("");
 }
 
 /* ---------- Dieta ---------- */
@@ -671,11 +700,26 @@ $("pForm").addEventListener("submit",e=>{e.preventDefault();const h=+$("pH").val
 
 
 const PLAN_V=2;
+function hasData(){return Object.keys(S.s||{}).length>0||(S.w||[]).length>0}
+function applyGoal(){if(!S.goal&&hasData())S.goal={start:80,target:70};if(S.goal){START=S.goal.start;GOAL=S.goal.target}}
+function openGoal(first){const sh=$("goalSheet");sh.hidden=false;sh.dataset.first=first?"1":"";
+  $("gsTitle").textContent=first?"Boas-vindas ao seu ciclo":"Editar meta";
+  $("gsText").textContent=first?"Antes de começar, informe seu peso atual e o peso que quer alcançar. O app calcula progresso, água e proteína a partir disso.":"Ajuste o peso inicial e a meta. Seus registros de peso continuam salvos.";
+  $("gStart").value=S.goal?S.goal.start:"";$("gTarget").value=S.goal?S.goal.target:"";$("gsErr").hidden=true;$("gsCancel").hidden=!!first;}
+function closeGoal(){$("goalSheet").hidden=true}
 function migrate(){if(S.pv===PLAN_V)return;
   for(const k of Object.keys(S.s||{})){const m=k.match(/^w(\d+)d(\d+)$/);if(!m)continue;const d=+m[2];if(![1,2,4,5].includes(d))continue;
     const r=S.s[k];if(r&&r.at){const x={};required(PLAN[d-1]).forEach(i=>x[i]=true);S.s[k]={x,c:{},at:r.at}}else delete S.s[k]}
   S.pv=PLAN_V;}
-function renderAll(){renderTreino();renderDieta();renderPlano();renderPeso();renderGuia();showTab(S.tab||"hoje",true)}
+$("goalForm").addEventListener("submit",e=>{e.preventDefault();
+  const a=parseFloat(String($("gStart").value).replace(",",".")),b=parseFloat(String($("gTarget").value).replace(",","."));
+  const er=$("gsErr");
+  if(!(a>=30&&a<=250&&b>=30&&b<=250)){er.textContent="Informe pesos entre 30 e 250 kg.";er.hidden=false;return}
+  if(Math.abs(a-b)<0.5){er.textContent="A meta precisa ser diferente do peso atual.";er.hidden=false;return}
+  S.goal={start:Math.round(a*10)/10,target:Math.round(b*10)/10};closeGoal();save("Meta salva");renderAll()});
+$("gsCancel").addEventListener("click",closeGoal);
+$("goalEdit").addEventListener("click",()=>openGoal(false));
+function renderAll(){applyGoal();renderTreino();renderDieta();renderPlano();renderPeso();renderGuia();showTab(S.tab||"hoje",true)}
 function showTab(t,silent){
   S.tab=t;
   ["hoje","dieta","plano","peso","guia"].forEach(n=>{$("v-"+n).hidden=n!==t});
@@ -740,6 +784,7 @@ $("wDate").value=today();
 try{const raw=localStorage.getItem(LSKEY);if(raw)S=Object.assign(S,JSON.parse(raw))}catch(e){}
 migrate();try{localStorage.setItem(LSKEY,JSON.stringify(S))}catch(e){}
 renderAll();
+if(!S.goal)openGoal(true);
 
 (async()=>{
   try{
@@ -750,7 +795,7 @@ renderAll();
     dbRef=db.doc(`data/users/${id}/ciclo`);
     const snap=await dbRef.get();
     const data=snap.exists?snap.data():null;
-    if(data&&data.state){try{const tab=S.tab;S=Object.assign({s:{},w:[],week:null,day:null},JSON.parse(data.state));S.tab=tab;migrate();try{localStorage.setItem(LSKEY,JSON.stringify(S))}catch(e){}renderAll()}catch(e){}}
+    if(data&&data.state){try{const tab=S.tab;S=Object.assign({s:{},w:[],week:null,day:null},JSON.parse(data.state));S.tab=tab;migrate();if(S.goal||hasData())closeGoal();try{localStorage.setItem(LSKEY,JSON.stringify(S))}catch(e){}renderAll()}catch(e){}}
     else if(Object.keys(S.s).length||S.w.length){push()}
   }catch(e){}
 })();
