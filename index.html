@@ -110,7 +110,7 @@ button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:tra
   background:repeating-radial-gradient(circle,transparent 0 18px,rgba(255,255,255,.09) 18px 20px);pointer-events:none}
 .hero > *{position:relative}
 .hero .eb{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:13px;opacity:.85}
-.hero h2{font-size:clamp(30px,8.4vw,46px);overflow-wrap:anywhere;font-weight:800;text-transform:uppercase;line-height:.92;margin:4px 0 8px}
+.hero h2{font-size:clamp(28px,7.8vw,46px);overflow-wrap:break-word;hyphens:none;font-weight:800;text-transform:uppercase;line-height:.92;margin:4px 0 8px}
 .hero .meta{display:flex;flex-wrap:wrap;gap:6px}
 .hero .meta span{font-size:12.5px;font-weight:600;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 10px}
 .bigring{width:80px;height:80px;display:block}
@@ -370,46 +370,49 @@ button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:tra
 
 <script>
 const PLAN=[
- {d:1,t:"Superiores A",sh:"Sup A",k:"upper",ex:[
+ {d:1,t:"Superiores A",sh:"Sup A",k:"upper",dur:"~60 min",ex:[
   ["Aquecimento geral","—","5–8 min","—",""],
-  ["Puxada frontal na polia",3,"10–12","60–90 s","Movimento controlado, sem balanço do tronco.",1],
-  ["Remada sentada na polia",3,"10–12","60–90 s","Mantenha o tronco estável.",1],
-  ["Supino com halteres",3,"10–12","90–120 s","Use amplitude confortável e controle a descida.",1],
-  ["Elevação lateral com halteres",2,"12–15","60–90 s","Evite impulso e eleve até uma altura confortável.",1],
-  ["Tríceps na polia",2,"12–15","60–90 s","Mantenha os cotovelos estáveis.",1],
-  ["Pallof press na polia",3,"10–12 por lado","45–60 s","Resista à rotação do tronco.",1],
-  ["Prancha abdominal",3,"20–40 s","45–60 s","Mantenha o tronco alinhado; interrompa se perder a técnica."],
+  ["Supino reto com barra",4,"6–8","60 s","Escápulas encaixadas, pés firmes. Desça controlando até tocar levemente o peito.",1],
+  ["Barra fixa (ou graviton)",4,"6–10","60 s","Pegada pronada, um pouco além dos ombros. Puxe o peito em direção à barra; sem balanço.",1],
+  ["Supino inclinado com halteres",3,"8–10","60 s","Banco a 30°. Desça até os cotovelos ficarem um pouco abaixo do banco.",1],
+  ["Remada curvada com barra",3,"8–10","60 s","Tronco a ~45°, coluna neutra. Puxe a barra em direção ao umbigo e segure 1 s.",1],
+  ["Desenvolvimento com halteres sentada",3,"8–10","60 s","Não trave os cotovelos no topo; desça até a altura das orelhas.",1],
+  ["Bi-set: elevação lateral + face pull",3,"12–15 + 15","60 s após o par","Faça os dois exercícios em sequência, sem pausa, e descanse só depois do par. Na elevação lateral, drop set na última série.",1],
+  ["Bi-set: tríceps corda + rosca direta (barra W)",3,"10–12 + 10–12","60 s após o par","Em sequência, sem pausa. Cotovelos fixos nos dois exercícios.",1],
+  ["Abdominal na polia (crunch)",3,"12–15","60 s","Ajoelhada, enrole o tronco levando os cotovelos aos joelhos. O quadril não se move.",1],
   ["Corrida leve",1,"20–25 min","—","Ritmo confortável, em que consiga conversar.",0,0,"run"]]},
- {d:2,t:"Inferiores A",sh:"Inf A",k:"lower",ex:[
+ {d:2,t:"Inferiores A",sh:"Inf A",k:"lower",dur:"~60 min",ex:[
   ["Aquecimento geral","—","5–8 min","—",""],
-  ["Agachamento com halter ou barra",3,"8–12","90–120 s","Escolha a variação que execute com técnica segura.",1],
-  ["Levantamento terra romeno",3,"10–12","90–120 s","Mantenha a coluna neutra e o movimento vindo do quadril.",1],
-  ["Elevação pélvica",3,"10–12","90 s","Pause brevemente no topo sem hiperestender a lombar.",1],
-  ["Mesa flexora",3,"12–15","60–90 s","Controle a volta do movimento.",1],
-  ["Cadeira abdutora",2,"15–20","60 s","Use amplitude controlada, sem impulsos.",1],
-  ["Panturrilha sentada",2,"12–15","60 s","Faça amplitude confortável e controlada.",1],
+  ["Agachamento livre com barra",4,"6–8","60 s","Profundidade até as coxas paralelas ou abaixo, com coluna neutra. Joelhos na direção dos pés.",1],
+  ["Leg press 45°",3,"10–12","60 s","Pés na largura do quadril. Não tire o quadril do banco. Drop set na última série.",1],
+  ["Agachamento búlgaro com halteres",3,"8–10 por perna","60 s","Pé de trás no banco. Tronco levemente inclinado para frente para ênfase em glúteo.",1],
+  ["Stiff com barra",3,"8–10","60 s","Joelhos levemente flexionados, barra perto das pernas. Desça até sentir o alongamento do posterior.",1],
+  ["Cadeira extensora",3,"12–15","60 s","Segure 1 s no topo com contração e volte em 2–3 s.",1],
+  ["Bi-set: mesa flexora + panturrilha em pé",3,"10–12 + 12–15","60 s após o par","Em sequência, sem pausa. Na panturrilha, pausa de 1 s embaixo e em cima.",1],
+  ["Elevação de pernas suspensa",3,"10–15","60 s","Pendurada na barra, eleve as pernas sem balanço, enrolando a pelve no topo. Iniciante nela: joelhos dobrados."],
   ["Caminhada leve",1,"5–10 min","—","Apenas para desacelerar.",0,1]]},
  {d:3,t:"Corrida e recuperação",sh:"Corrida",k:"run",ex:[
   ["Corrida leve",1,"Conforme tolerância atual","—","Ritmo conversável. Não aumente velocidade e duração ao mesmo tempo.",0,0,"run"],
   ["Mobilidade ou caminhada leve",1,"5–10 min","—","",0,1]]},
- {d:4,t:"Superiores B",sh:"Sup B",k:"upper",ex:[
+ {d:4,t:"Superiores B",sh:"Sup B",k:"upper",dur:"~60 min",ex:[
   ["Aquecimento geral","—","5–8 min","—",""],
-  ["Remada unilateral com halter",3,"10 por lado","60–90 s","Mantenha o tronco estável.",1],
-  ["Supino inclinado com halteres",3,"10–12","90–120 s","Use carga e amplitude confortáveis.",1],
-  ["Puxada frontal com pegada confortável",2,"12","60–90 s","Evite puxar atrás da nuca.",1],
-  ["Face pull na polia",2,"12–15","60–90 s","Puxe em direção ao rosto, sem elevar excessivamente os ombros.",1],
-  ["Rosca bíceps com halteres",2,"12","60–90 s","Evite balançar o corpo.",1],
-  ["Dead bug",3,"10 por lado","45–60 s","Mantenha a lombar controlada durante o movimento."],
-  ["Prancha lateral",2,"20–30 s por lado","45–60 s","Adapte o apoio se necessário."],
+  ["Puxada frontal pegada aberta",4,"8–10","60 s","Peito para cima, puxe a barra até a parte alta do peito levando os cotovelos para baixo.",1],
+  ["Desenvolvimento militar com barra (ou máquina)",4,"6–8","60 s","Glúteos e abdômen contraídos; não arqueie a lombar.",1],
+  ["Remada unilateral com halter",3,"8–10 por lado","60 s","Apoio no banco. Puxe o halter em direção ao quadril, sem girar o tronco.",1],
+  ["Crucifixo no crossover",3,"12","60 s","Cotovelos levemente flexionados e fixos; feche os braços à frente do peito.",1],
+  ["Bi-set: elevação lateral + crucifixo inverso",3,"12–15 + 15","60 s após o par","Em sequência, sem pausa. Drop set na última série da elevação lateral.",1],
+  ["Bi-set: rosca martelo + tríceps francês com halter",3,"10–12 + 10–12","60 s após o par","Em sequência, sem pausa. No francês, cotovelos apontados para cima.",1],
+  ["Rollout com roda abdominal (ou bola)",3,"8–12","60 s","Abdômen firme e glúteos contraídos; vá só até onde a lombar não afundar."],
   ["Corrida leve",1,"15–20 min","—","Só se estiver recuperada; troque por caminhada ou pule se houver fadiga.",0,1,"run"]]},
- {d:5,t:"Inferiores B",sh:"Inf B",k:"lower",ex:[
+ {d:5,t:"Inferiores B",sh:"Inf B",k:"lower",dur:"~60 min",ex:[
   ["Aquecimento geral","—","5–8 min","—",""],
-  ["Leg press",3,"10–12","90–120 s","Não bloqueie os joelhos; use amplitude confortável.",1],
-  ["Afundo reverso com halteres",2,"8–10 por perna","90 s","Se houver dor ou instabilidade, substitua por variação orientada pelo profissional.",1],
-  ["Cadeira extensora",2,"12–15","60–90 s","Controle a extensão e a volta.",1],
-  ["Cadeira flexora",3,"12–15","60–90 s","Controle a fase de retorno.",1],
-  ["Extensão de quadril no cabo",2,"12–15 por perna","60–90 s","Evite compensar com a lombar.",1],
-  ["Panturrilha em pé ou sentada",2,"12–15","60 s","Movimento controlado.",1]]},
+  ["Levantamento terra romeno",4,"6–8","60 s","Quadril para trás, barra rente às pernas, coluna neutra. Suba contraindo os glúteos.",1],
+  ["Elevação pélvica com barra",4,"8–10","60 s","Costas apoiadas no banco, queixo levemente para baixo. Pausa de 1 s no topo.",1],
+  ["Agachamento hack (máquina)",3,"8–10","60 s","Pés um pouco à frente na plataforma; desça com controle.",1],
+  ["Afundo reverso com halteres",3,"10 por perna","60 s","Passo longo para trás, tronco ereto, joelho de trás quase no chão.",1],
+  ["Mesa flexora",3,"10–12","60 s","Quadril colado no banco. Drop set na última série.",1],
+  ["Bi-set: cadeira abdutora + panturrilha sentada",3,"15–20 + 12–15","60 s após o par","Em sequência, sem pausa. Na abdutora, segure 1 s aberta.",1],
+  ["Prancha lateral com elevação de quadril",3,"10–12 por lado","60 s","Apoio no antebraço; desça e suba o quadril com controle."]]},
  {d:6,t:"Corrida contínua",sh:"Corrida",k:"run",ex:[
   ["Corrida confortável",1,"30–45 min, se já tolerado","—","Converse em frases. Se estiver começando, faça menos tempo e progrida aos poucos.",0,0,"run"]]},
  {d:7,t:"Descanso",sh:"Desc.",k:"rest",ex:[
@@ -453,10 +456,10 @@ PLAN.forEach(day=>{
 });
 
 const PHASES=[
- {w:[1,2],tag:"Sem. 1–2",short:"Técnica primeiro, ~3 repetições em reserva",txt:"Use cargas que permitam terminar com cerca de 3 repetições possíveis a mais. Priorize a técnica."},
- {w:[3,4],tag:"Sem. 3–4",short:"Suba a carga aos poucos",txt:"Quando atingir o limite superior das repetições em todas as séries com técnica adequada, aumente a carga aos poucos (cerca de 2–5% nos superiores e 5–10% nos inferiores, se disponível)."},
- {w:[5,6,7],tag:"Sem. 5–7",short:"Pequenas melhorias, ~2 em reserva",txt:"Mantenha a técnica e busque pequenas melhorias. Termine a maioria das séries com cerca de 2 repetições em reserva."},
- {w:[8],tag:"Sem. 8",short:"Avaliação e ajuste",txt:"Avalie peso médio, cintura, fotos em condições semelhantes e desempenho. Se houver fadiga acumulada, reduza as séries em 30–40% por uma semana."}];
+ {w:[1,2],tag:"Sem. 1–2",short:"Ajuste de cargas, ~2 repetições em reserva",txt:"Adaptação ao plano intermediário: encontre as cargas de cada exercício e termine as séries com cerca de 2 repetições em reserva. Registre as cargas no app."},
+ {w:[3,4],tag:"Sem. 3–4",short:"Progressão dupla de carga",txt:"Quando completar o topo da faixa de repetições em todas as séries, suba a carga (cerca de 2–5% nos superiores e 5–10% nos inferiores) e volte ao início da faixa."},
+ {w:[5,6,7],tag:"Sem. 5–7",short:"Intensificação, 1–2 em reserva",txt:"Nos exercícios compostos, termine com 1–2 repetições em reserva. Nos isoladores e drop sets, a última série pode chegar perto da falha, mantendo a técnica."},
+ {w:[8],tag:"Sem. 8",short:"Avaliação e semana leve",txt:"Avalie peso médio, cintura, fotos e cargas. Faça uma semana leve: reduza as séries em 30–40% e mantenha as cargas, antes de recomeçar um novo ciclo."}];
 const GUIDE=[
  ["Perda de peso","O treino ajuda a preservar massa muscular; a perda de gordura também depende de déficit calórico sustentável, sono e consistência."],
  ["Meta e prazo","80 kg → 70 kg. Uma referência possível é 0,25–0,75 kg por semana; o prazo pode variar bastante, frequentemente alguns meses."],
@@ -500,7 +503,7 @@ function renderTreino(){
   const req=required(day),nOk=req.filter(i=>r.x&&r.x[i]).length;
   const hero=$("hero");hero.dataset.k=day.k;
   hero.innerHTML=`<div><div class="eb">Semana ${w} · Dia ${String(d).padStart(2,"0")}</div><h2>${esc(day.t)}</h2>
-    <div class="meta"><span class="num">${nOk} de ${req.length} itens</span>${done&&r.at?`<span>feito em ${fmtDate(r.at)}</span>`:""}${day.k!=="rest"&&day.k!=="run"?`<span>${ph.tag}</span>`:""}</div></div>${ring(p)}`;
+    <div class="meta"><span class="num">${nOk} de ${req.length} itens</span>${done&&r.at?`<span>feito em ${fmtDate(r.at)}</span>`:""}${day.dur?`<span>${day.dur} · descanso 60 s</span>`:""}${day.k!=="rest"&&day.k!=="run"?`<span>${ph.tag}</span>`:""}</div></div>${ring(p)}`;
   const prev=w>1?rec(w-1,d):null;
   $("list").innerHTML=day.ex.map((e,i)=>{
     const on=!!(r.x&&r.x[i]),id=`c-${k}-${i}`,prevLoad=prev&&prev.c&&prev.c[i];
@@ -652,6 +655,12 @@ function renderDieta(){
 $("pForm").addEventListener("submit",e=>{e.preventDefault();const h=+$("pH").value,a=+$("pA").value;if(!(h>0&&a>0))return;
   S.diet=S.diet||{log:{},prof:{}};S.diet.prof={h,a,sex:$("pS").value};document.activeElement.blur();save("Meta calculada");renderDieta()});
 
+
+const PLAN_V=2;
+function migrate(){if(S.pv===PLAN_V)return;
+  for(const k of Object.keys(S.s||{})){const m=k.match(/^w(\d+)d(\d+)$/);if(!m)continue;const d=+m[2];if(![1,2,4,5].includes(d))continue;
+    const r=S.s[k];if(r&&r.at){const x={};required(PLAN[d-1]).forEach(i=>x[i]=true);S.s[k]={x,c:{},at:r.at}}else delete S.s[k]}
+  S.pv=PLAN_V;}
 function renderAll(){renderTreino();renderDieta();renderPlano();renderPeso();renderGuia();showTab(S.tab||"hoje",true)}
 function showTab(t,silent){
   S.tab=t;
@@ -715,6 +724,7 @@ $("wForm").addEventListener("submit",e=>{e.preventDefault();const dt=$("wDate").
 /* ---------- início ---------- */
 $("wDate").value=today();
 try{const raw=localStorage.getItem(LSKEY);if(raw)S=Object.assign(S,JSON.parse(raw))}catch(e){}
+migrate();try{localStorage.setItem(LSKEY,JSON.stringify(S))}catch(e){}
 renderAll();
 
 (async()=>{
@@ -726,7 +736,7 @@ renderAll();
     dbRef=db.doc(`data/users/${id}/ciclo`);
     const snap=await dbRef.get();
     const data=snap.exists?snap.data():null;
-    if(data&&data.state){try{const tab=S.tab;S=Object.assign({s:{},w:[],week:null,day:null},JSON.parse(data.state));S.tab=tab;try{localStorage.setItem(LSKEY,JSON.stringify(S))}catch(e){}renderAll()}catch(e){}}
+    if(data&&data.state){try{const tab=S.tab;S=Object.assign({s:{},w:[],week:null,day:null},JSON.parse(data.state));S.tab=tab;migrate();try{localStorage.setItem(LSKEY,JSON.stringify(S))}catch(e){}renderAll()}catch(e){}}
     else if(Object.keys(S.s).length||S.w.length){push()}
   }catch(e){}
 })();
